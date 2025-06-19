@@ -99,18 +99,30 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Autenticação
 
-Todas as rotas da API exigem autenticação via Laravel Sanctum. Para autenticar, faça login e obtenha um token:
+Agora a autenticação é feita via endpoint de login:
 
-### Gerando um token de acesso
-
-Faça uma requisição para `/login` (ou crie um endpoint customizado) e gere um token:
-
-```php
-$user = \App\Models\User::where('email', 'admin@email.com')->first();
-$token = $user->createToken('api-token')->plainTextToken;
+### Login
+```http
+POST /api/login
+Content-Type: application/json
+{
+  "email": "admin@email.com",
+  "password": "password"
+}
+```
+**Resposta:**
+```json
+{
+  "token": "SEU_TOKEN_AQUI",
+  "user": {
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@email.com"
+  }
+}
 ```
 
-Use esse token no header das requisições:
+Use o token retornado no header das requisições:
 ```
 Authorization: Bearer SEU_TOKEN_AQUI
 ```
