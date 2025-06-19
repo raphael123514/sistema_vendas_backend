@@ -4,12 +4,16 @@ namespace Tests\Feature\Controllers;
 
 use App\Models\Sale;
 use App\Models\Seller;
+use App\Models\User;
 use Tests\TestCase;
 
 class SellerControllerTest extends TestCase
 {
     public function test_can_list_sellers_with_pagination(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         Seller::factory()->count(20)->create();
         $response = $this->getJson('/api/sellers?page=2&per_page=10');
         $response->assertStatus(200)
@@ -27,6 +31,9 @@ class SellerControllerTest extends TestCase
 
     public function test_can_create_seller(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $data = [
             'name' => 'Novo Vendedor',
             'email' => 'novo@email.com',
@@ -41,6 +48,9 @@ class SellerControllerTest extends TestCase
 
     public function test_cannot_create_seller_with_invalid_data(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $data = [
             'name' => '',
             'email' => 'not-an-email',
@@ -52,6 +62,9 @@ class SellerControllerTest extends TestCase
 
     public function test_can_show_seller(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $seller = Seller::factory()->create();
         $response = $this->getJson("/api/sellers/{$seller->id}");
         $response->assertStatus(200)
@@ -63,6 +76,9 @@ class SellerControllerTest extends TestCase
 
     public function test_can_list_sales_of_seller(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $seller = Seller::factory()->create();
         Sale::factory()->count(5)->create(['seller_id' => $seller->id]);
         $response = $this->getJson("/api/sellers/{$seller->id}/sales");

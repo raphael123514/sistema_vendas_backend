@@ -9,17 +9,16 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('sellers')->group(function () {
-    Route::post('/', [SellerController::class, 'store']);          // Cadastrar vendedor
-    Route::get('/', [SellerController::class, 'index']);           // Listar todos vendedores
-    Route::get('/{id}', [SellerController::class, 'show']);        // Mostrar vendedor específico (opcional)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('sellers')->group(function () {
+        Route::post('/', [SellerController::class, 'store']);          
+        Route::get('/', [SellerController::class, 'index']);           
+        Route::get('/{id}', [SellerController::class, 'show']);       
+        Route::get('/{id}/sales', [SellerController::class, 'sales']);
+    });
 
-    // Vendas por vendedor
-    Route::get('/{id}/sales', [SellerController::class, 'sales']); // Listar vendas do vendedor
-});
-
-// Rotas para Vendas
-Route::prefix('sales')->group(function () {
-    Route::post('/', [SaleController::class, 'store']);            // Cadastrar venda
-    Route::get('/', [SaleController::class, 'index']);             // Listar todas vendas
+    Route::prefix('sales')->group(function () {
+        Route::post('/', [SaleController::class, 'store']);            
+        Route::get('/', [SaleController::class, 'index']);             
+    });
 });

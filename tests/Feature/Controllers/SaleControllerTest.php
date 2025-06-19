@@ -4,12 +4,16 @@ namespace Tests\Feature\Controllers;
 
 use App\Models\Sale;
 use App\Models\Seller;
+use App\Models\User;
 use Tests\TestCase;
 
 class SaleControllerTest extends TestCase
 {
     public function test_can_list_sales_with_pagination(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $seller = Seller::factory()->create();
         $sales = Sale::factory()->count(20)->create([
             'seller_id' => $seller->id,
@@ -42,6 +46,9 @@ class SaleControllerTest extends TestCase
 
     public function test_can_create_sale(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $seller = Seller::factory()->create();
         $saleData = [
             'seller_id' => $seller->id,
@@ -75,6 +82,9 @@ class SaleControllerTest extends TestCase
 
     public function test_cannot_create_sale_with_invalid_data(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $invalidData = [
             'seller_id' => 999,
             'amount' => -100,
@@ -89,6 +99,9 @@ class SaleControllerTest extends TestCase
 
     public function test_pagination_defaults_to_fifteen_items(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $seller = Seller::factory()->create();
         Sale::factory()->count(20)->create([
             'seller_id' => $seller->id,
@@ -104,6 +117,9 @@ class SaleControllerTest extends TestCase
 
     public function test_can_specify_custom_per_page_value(): void
     {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
         $seller = Seller::factory()->create();
         Sale::factory()->count(20)->create([
             'seller_id' => $seller->id,
