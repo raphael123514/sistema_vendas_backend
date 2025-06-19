@@ -99,6 +99,7 @@ services:
 networks:
     sail:
         driver: bridge
+        name: vendas-network
 volumes:
     sail-mysql:
         driver: local
