@@ -31,8 +31,8 @@ class AuthControllerTest extends TestCase
                         'id',
                         'name',
                         'email',
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
