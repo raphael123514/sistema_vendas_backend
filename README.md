@@ -59,3 +59,117 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+# Sistema de Vendas - Backend
+
+## Subindo o projeto com Laravel Sail
+
+1. **Copie o arquivo de exemplo de ambiente:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Suba os containers com o Sail:**
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
+
+3. **Instale as dependências do Composer (caso necessário):**
+   ```bash
+   ./vendor/bin/sail composer install
+   ```
+
+4. **Gere a chave da aplicação:**
+   ```bash
+   ./vendor/bin/sail artisan key:generate
+   ```
+
+5. **Rode as migrations e seeds:**
+   ```bash
+   ./vendor/bin/sail artisan migrate --seed
+   ```
+
+6. **(Opcional) Crie um usuário para autenticação:**
+   ```bash
+   ./vendor/bin/sail artisan tinker
+   >>> \\App\\Models\\User::factory()->create(['email' => 'admin@email.com', 'password' => bcrypt('password')]);
+   ```
+
+## Autenticação
+
+Todas as rotas da API exigem autenticação via Laravel Sanctum. Para autenticar, faça login e obtenha um token:
+
+### Gerando um token de acesso
+
+Faça uma requisição para `/login` (ou crie um endpoint customizado) e gere um token:
+
+```php
+$user = \App\Models\User::where('email', 'admin@email.com')->first();
+$token = $user->createToken('api-token')->plainTextToken;
+```
+
+Use esse token no header das requisições:
+```
+Authorization: Bearer SEU_TOKEN_AQUI
+```
+
+## Exemplos de uso dos endpoints
+
+### Listar vendedores (paginado)
+```http
+GET /api/sellers?page=1&per_page=10
+Authorization: Bearer SEU_TOKEN_AQUI
+```
+
+### Criar vendedor
+```http
+POST /api/sellers
+Authorization: Bearer SEU_TOKEN_AQUI
+Content-Type: application/json
+{
+  "name": "João Silva",
+  "email": "joao@email.com"
+}
+```
+
+### Mostrar vendedor
+```http
+GET /api/sellers/1
+Authorization: Bearer SEU_TOKEN_AQUI
+```
+
+### Listar vendas de um vendedor
+```http
+GET /api/sellers/1/sales
+Authorization: Bearer SEU_TOKEN_AQUI
+```
+
+### Listar vendas (paginado)
+```http
+GET /api/sales?page=1&per_page=10
+Authorization: Bearer SEU_TOKEN_AQUI
+```
+
+### Criar venda
+```http
+POST /api/sales
+Authorization: Bearer SEU_TOKEN_AQUI
+Content-Type: application/json
+{
+  "seller_id": 1,
+  "amount": 100.50,
+  "date": "2025-06-19"
+}
+```
+
+---
+
+- Todas as respostas seguem o padrão de API Resource do Laravel.
+- Para rodar os testes:
+  ```bash
+  ./vendor/bin/sail artisan test
+  ```
+
+---
