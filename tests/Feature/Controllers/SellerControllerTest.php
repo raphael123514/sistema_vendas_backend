@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Models\Seller;
 use App\Models\Sale;
+use App\Models\Seller;
 use Tests\TestCase;
 
 class SellerControllerTest extends TestCase
 {
-
     public function test_can_list_sellers_with_pagination(): void
     {
         Seller::factory()->count(20)->create();
@@ -16,10 +15,10 @@ class SellerControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'name', 'email', 'created_at', 'updated_at']
+                    '*' => ['id', 'name', 'email', 'created_at', 'updated_at'],
                 ],
                 'links',
-                'meta'
+                'meta',
             ])
             ->assertJsonPath('meta.per_page', 10)
             ->assertJsonPath('meta.current_page', 2)
@@ -35,7 +34,7 @@ class SellerControllerTest extends TestCase
         $response = $this->postJson('/api/sellers', $data);
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'data' => ['id', 'name', 'email', 'created_at', 'updated_at']
+                'data' => ['id', 'name', 'email', 'created_at', 'updated_at'],
             ]);
         $this->assertDatabaseHas('sellers', $data);
     }
@@ -57,7 +56,7 @@ class SellerControllerTest extends TestCase
         $response = $this->getJson("/api/sellers/{$seller->id}");
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'data' => ['id', 'name', 'email', 'created_at', 'updated_at']
+                'data' => ['id', 'name', 'email', 'created_at', 'updated_at'],
             ])
             ->assertJsonPath('data.id', $seller->id);
     }
@@ -70,8 +69,8 @@ class SellerControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'seller_id', 'amount', 'date', 'created_at', 'updated_at']
-                ]
+                    '*' => ['id', 'seller_id', 'amount', 'date', 'created_at', 'updated_at'],
+                ],
             ])
             ->assertJsonCount(5, 'data');
     }
