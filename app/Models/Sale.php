@@ -13,12 +13,12 @@ class Sale extends Model
     protected $fillable = [
         'seller_id',
         'amount',
-        'date'
+        'date',
     ];
 
     protected $casts = [
         'date' => 'date',
-        'amount' => 'decimal:2'
+        'amount' => 'decimal:2',
     ];
 
     public function seller(): BelongsTo

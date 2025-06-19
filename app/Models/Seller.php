@@ -12,7 +12,7 @@ class Seller extends Model
 
     protected $fillable = [
         'name',
-        'email'
+        'email',
     ];
 
     public function sales(): HasMany
