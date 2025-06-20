@@ -9,6 +9,6 @@ class ListSellerSalesAction
 {
     public function execute(int $sellerId): Collection
     {
-        return Sale::where('seller_id', $sellerId)->get();
+        return Sale::with('seller')->where('seller_id', $sellerId)->get();
     }
 }
