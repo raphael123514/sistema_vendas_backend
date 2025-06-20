@@ -7,8 +7,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ListSellersAction
 {
-    public function execute(int $page = 1, int $perPage = 15): LengthAwarePaginator
+    public function execute(int $page = 1, int $perPage = 15, ?string $name = null): LengthAwarePaginator
     {
-        return Seller::query()->latest()->paginate($perPage, ['*'], 'page', $page);
+        $query = Seller::query();
+        if ($name) {
+            $query->where('name', 'like', "%{$name}%");
+        }
+        return $query->latest()->paginate($perPage, ['*'], 'page', $page);
     }
 }

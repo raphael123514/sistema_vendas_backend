@@ -28,7 +28,8 @@ class SellerController extends Controller
     {
         $page = (int) $request->input('page', 1);
         $perPage = (int) $request->input('per_page', 15);
-        $sellers = $this->listSellersAction->execute($page, $perPage);
+        $name = $request->input('name');
+        $sellers = $this->listSellersAction->execute($page, $perPage, $name);
 
         return SellerResource::collection($sellers);
     }

@@ -176,6 +176,16 @@ Content-Type: application/json
 }
 ```
 
+## Endpoints da API
+
+### Listar vendedores (com filtro por nome)
+```http
+GET /api/sellers?name=joao&page=1&per_page=10
+Authorization: Bearer SEU_TOKEN_AQUI
+```
+- `name` (opcional): filtra vendedores cujo nome contenha o valor informado (ex: `joao` retorna todos que tenham "joao" no nome, usando LIKE SQL).
+- `page` e `per_page` funcionam normalmente para paginação.
+
 ---
 
 - Todas as respostas seguem o padrão de API Resource do Laravel.

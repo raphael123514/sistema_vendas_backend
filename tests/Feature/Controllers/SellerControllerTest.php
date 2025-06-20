@@ -90,4 +90,28 @@ class SellerControllerTest extends TestCase
             ])
             ->assertJsonCount(5, 'data');
     }
+
+    public function test_can_filter_sellers_by_name(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
+        Seller::factory()->create(['name' => 'João da Silva']);
+        Seller::factory()->create(['name' => 'Maria Oliveira']);
+        Seller::factory()->create(['name' => 'Joana Souza']);
+
+        $response = $this->getJson('/api/sellers?name=jo');
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['id', 'name', 'email', 'created_at', 'updated_at'],
+                ],
+                'links',
+                'meta',
+            ]);
+        $names = array_column($response->json('data'), 'name');
+        $this->assertContains('João da Silva', $names);
+        $this->assertContains('Joana Souza', $names);
+        $this->assertNotContains('Maria Oliveira', $names);
+    }
 }
