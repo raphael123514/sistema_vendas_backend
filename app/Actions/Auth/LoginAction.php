@@ -13,7 +13,8 @@ class LoginAction
         if (! $user || ! Hash::check($password, $user->password)) {
             return null;
         }
-        $token = $user->createToken('api-token')->plainTextToken;
+        $tokenResult = $user->createToken('api-token', [], now()->addHour());
+        $token = $tokenResult->plainTextToken;
 
         return [
             'token' => $token,
