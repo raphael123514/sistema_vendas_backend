@@ -6,6 +6,7 @@ use App\Actions\Sellers\ShowSellerAction;
 use App\Jobs\SendCommissionEmailJob;
 use App\Http\Requests\ResendCommissionRequest;
 use Illuminate\Http\Request;
+use App\Models\Seller;
 
 class CommissionController extends Controller
 {
@@ -13,11 +14,8 @@ class CommissionController extends Controller
         private ShowSellerAction $showSellerAction
     ) {}
 
-    public function resend(ResendCommissionRequest $request)
+    public function resend(Seller $seller)
     {
-        $sellerId = $request->validated('seller_id');
-        $seller = $this->showSellerAction->execute($sellerId);
-
         dispatch(new SendCommissionEmailJob($seller))->onQueue('commissions');
 
         return response()->json(['message' => 'Commission email enqueued successfully.']);

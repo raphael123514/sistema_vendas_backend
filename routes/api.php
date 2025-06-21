@@ -19,18 +19,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [SellerController::class, 'index']);
         Route::get('/{id}', [SellerController::class, 'show']);
         Route::get('/{id}/sales', [SellerController::class, 'sales']);
+        Route::post('/{seller}/resend-commission', [CommissionController::class, 'resend']);
     });
 
     Route::prefix('sales')->group(function () {
         Route::post('/', [SaleController::class, 'store']);
         Route::get('/', [SaleController::class, 'index']);
     });
-});
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::prefix('commission')->group(callback: function () {
-        Route::post('/resend', [CommissionController::class, 'resend']);
-    });
-
 });
 
