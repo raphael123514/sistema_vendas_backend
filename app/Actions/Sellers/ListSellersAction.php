@@ -13,6 +13,7 @@ class ListSellersAction
         if ($name) {
             $query->where('name', 'like', "%{$name}%");
         }
+
         return $query->latest()->paginate($perPage, ['*'], 'page', $page);
     }
 }
