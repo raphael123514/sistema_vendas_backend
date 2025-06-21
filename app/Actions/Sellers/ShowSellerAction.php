@@ -8,6 +8,6 @@ class ShowSellerAction
 {
     public function execute(int $id): Seller
     {
-        return Seller::findOrFail($id);
+        return Seller::with('sales')->findOrFail($id);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SellerController;
 use Illuminate\Http\Request;
@@ -25,3 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [SaleController::class, 'index']);
     });
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('commission')->group(callback: function () {
+        Route::post('/resend', [CommissionController::class, 'resend']);
+    });
+
+});
+

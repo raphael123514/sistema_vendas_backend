@@ -15,12 +15,13 @@ class DailySellerReportMail extends Mailable
         public $totalSales,
         public $totalAmount,
         public $totalCommission,
-        public $date
+        public $date, 
+        public $subject
     ) {}
 
     public function build()
     {
-        return $this->subject('Seu relatório diário de vendas')
+        return $this->subject($this->subject)
             ->view('emails.daily_seller_report');
     }
 }
