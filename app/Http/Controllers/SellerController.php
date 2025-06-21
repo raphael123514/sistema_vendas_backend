@@ -11,6 +11,7 @@ use App\Http\Resources\SaleResource;
 use App\Http\Resources\SellerResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Cache;
 
 class SellerController extends Controller
 {
@@ -22,14 +23,19 @@ class SellerController extends Controller
     ) {}
 
     /**
-     * Listar todos vendedores
+     * Listar todos vendedores (com cache)
      */
     public function index(Request $request): AnonymousResourceCollection
     {
         $page = (int) $request->input('page', 1);
         $perPage = (int) $request->input('per_page', 15);
         $name = $request->input('name');
-        $sellers = $this->listSellersAction->execute($page, $perPage, $name);
+
+        $cacheKey = 'sellers:index:' . md5("page={$page}|perPage={$perPage}|name={$name}");
+
+        $sellers = Cache::remember($cacheKey, now()->addMinutes(value: 60), function () use ($page, $perPage, $name) {
+            return $this->listSellersAction->execute($page, $perPage, $name);
+        });
 
         return SellerResource::collection($sellers);
     }
@@ -55,11 +61,15 @@ class SellerController extends Controller
     }
 
     /**
-     * Listar vendas do vendedor
+     * Listar vendas do vendedor (com cache)
      */
     public function sales($id): AnonymousResourceCollection
     {
-        $sales = $this->listSellerSalesAction->execute($id);
+        $cacheKey = "sellers:{$id}:sales";
+
+        $sales = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($id) {
+            return $this->listSellerSalesAction->execute($id);
+        });
 
         return SaleResource::collection($sales);
     }
